@@ -1,9 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CubesManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\JobSystem\JobSystem_JobParallelForTransform_Position.cs">
     <Files>
-      <File FileName="Assets\Scripts\CubesManager.cs" Line="69" Column="16" />
-      <File FileName="Assets\Scripts\JobSystem_JobParallelForTransform.cs" Line="15" Column="15" />
+      <File FileName="Assets\Scripts\CubesManager.cs" Line="48" Column="27" />
+      <File FileName="Assets\Scripts\JobSystem\JobSystem_JobParallelForTransform_Rotation.cs" Line="5" Column="14" />
+      <File FileName="Assets\Scripts\JobSystem\JobSystem_JobParallelForTransform_Position.cs" Line="11" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

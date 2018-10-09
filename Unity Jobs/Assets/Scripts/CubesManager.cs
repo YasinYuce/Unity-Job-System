@@ -28,7 +28,7 @@ public class CubesManager : MonoBehaviour
 		_transforms = new Transform[size];
 		for (int x = 0; x < xCount; x++) {
 			for (int z = 0; z < zCount; z++) {
-				int index = x * xCount + z;
+				int index = x * zCount + z;
 				_transforms [index] = Instantiate (prefab, new Vector3 (x, 0f, z), Quaternion.identity).transform;
 				_transforms [index].parent = transform;
 			}
@@ -38,27 +38,39 @@ public class CubesManager : MonoBehaviour
 	}
 	#endregion
 
-	JobHandle handle;
 	void FixedUpdate(){
 		if (UnityJobs)
-			scheduleJob ();
+			scheduleJobs ();
 		 else
-			withoutJob ();
+			withoutJobs ();
 	}
 
-	void scheduleJob(){
+	private JobHandle handle;
+	private bool reverse = false;
+	void scheduleJobs(){
 		handle.Complete ();
 
-		JobSystem_JobParallelForTransform job = new JobSystem_JobParallelForTransform () {
-			Speed = speed,
+		// Rotation job
+		JobSystem_JobParallelForTransform_Rotation job0 = new JobSystem_JobParallelForTransform_Rotation () {
+			RotationSpeed = speed,
 		};
 
-		handle = job.Schedule (transAccessArray);
+		JobHandle handle0 = job0.Schedule (transAccessArray);
+
+		//Position job
+		JobSystem_JobParallelForTransform_Position job1 = new JobSystem_JobParallelForTransform_Position () {
+			MoveSpeed = reverse ? speed : -speed,
+		};
+
+		handle = job1.Schedule (transAccessArray, handle0);
 
 		JobHandle.ScheduleBatchedJobs ();
+
+		reverse = !reverse;
 	}
 
-	void withoutJob(){
+	void withoutJobs(){
+		//Rotate all transforms on x, y ,z same as job
 		for (int i = 0; i < _transforms.Length; i++) {
 			Vector3 t = _transforms [i].rotation.eulerAngles;
 
@@ -68,6 +80,19 @@ public class CubesManager : MonoBehaviour
 
 			_transforms [i].rotation = Quaternion.Euler (t);
 		}
+		//change positions of all transforms on x, y ,z same as job
+		float _speed = reverse ? speed : -speed;
+		for (int i = 0; i < _transforms.Length; i++) {
+			Vector3 t = _transforms [i].position;
+
+			t.x += _speed;
+			t.y += _speed;
+			t.z += _speed;
+
+			_transforms [i].position = t;
+		}
+
+		reverse = !reverse;
 	}
 
 	void OnDestroy(){
